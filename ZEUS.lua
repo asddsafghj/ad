@@ -9,6 +9,7 @@ function get_sudo()
     redis:set("ZEUS:" .. Zeus_id .. ":sudoset", true)
     redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
     redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
+    redis:sadd("ZEUS:" .. Zeus_id .. ":wait", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
     redis:sadd("ZEUS:" .. Zeus_id .. ":good", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
     redis:set("ZEUS:" .. Zeus_id .. ":fwdtime", true)
     return print("Ok. Sudo set")
@@ -52,7 +53,7 @@ function resolve_username(username, cb)
   }, cb, cmd)
 end
 function reload(chat_id, msg_id)
-  dofile("./.senator-" .. Zeus_id .. "/senator-" .. Zeus_id .. ".lua")
+  dofile("./.ZEUS-" .. Zeus_id .. "/ZEUS-" .. Zeus_id .. ".lua")
   send(chat_id, msg_id, "Done")
 end
 function process_join(s, t)
@@ -231,7 +232,7 @@ function Doing(data, Zeus_id)
       if is_myZEUS(msg) then
         find_link(text)
         if text:match("^(.*)(حذف شه)$") then
-          local matches = text:match("^(.*) حف شه$")
+          local matches = text:match("^(.*) حذف شه$")
           if matches == "لینک" then
             redis:del("ZEUS:" .. Zeus_id .. ":good")
             redis:del("ZEUS:" .. Zeus_id .. ":wait")
@@ -675,7 +676,7 @@ Creator => @sudo_senator]]
             from_background_ = 1
           }, cb or dl_cb, cmd)
         elseif text:match("^(راهنما)$") or text:match("^([Hh]elp)$") or text:match("^(راهنمای)$") then
-          local txt = "\nHelp for TeleGram Advertisin Robot (ZEUSAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\n\n \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\n"
+          local txt = "\nHelp for TeleGram Advertisin Robot (ZEUSAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\n\nدستورات حذف لینک ،مخاطبین،مدیران \n\nمدیران حذف شه \nلینک ها حذف بشه \nمخاطبین حذف بشه\n\nفعال و غیرفعال سازی ذخیره مخاطبین ،سرچ لینک ،عضویت،چک لینک\nجوین فعال\nچک لینک فعال\nسرچ لینک فعال \nذخیره مخاطب فعال\n\nجوین غیرفعال\nسرچ لینک غیرفعال\nچک لینک غیرفعال \nذخیره مخاطب غیرفعال\n\nبرای فروارد همگانی \nرپیلای و دستور فروارد همگانی بفرستین\nبرای دریافت آمار \nآمار ،پنل،panel\n\nبرای افزدون مخاطبین در گروه \nافزودن مخاطبین\n\nبرای فروارد \nفروارد به پیوی \nفروارد به سوپرگروه ها\n\nاین لیست در حال بروزرسانی میباشد \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n ZEUSChannel @ZEUSbotsupport    \nDeveloped by @sudo_senator\n"
           return send(msg.chat_id_, msg.id_, txt)
         elseif text:match("^(ZEUSSpm) (%d+)$") then
           local matches = text:match("%d+")

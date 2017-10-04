@@ -231,62 +231,62 @@ function Doing(data, Zeus_id)
       end
       if is_myZEUS(msg) then
         find_link(text)
-        if text:match("^(.*) (\216\168\217\190\216\167\218\169)$") then
-          local matches = text:match("^(.*) \216\168\217\190\216\167\218\169$")
-          if matches == "\217\132\219\140\217\134\218\169\216\167\216\177\217\136" then
+        if text:match("^(.*) (حذف شه)$") then
+          local matches = text:match("^(.*) حذف شه$")
+          if matches == "لینک ها" then
             redis:del("ZEUS:" .. Zeus_id .. ":good")
             redis:del("ZEUS:" .. Zeus_id .. ":wait")
             redis:del("ZEUS:" .. Zeus_id .. ":save")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\133\216\174\216\167\216\183\216\168\216\167\216\177\217\136" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "مخاطب ها" then
             redis:del("ZEUS:" .. Zeus_id .. ":savecontacts")
             redis:del("ZEUS:" .. Zeus_id .. ":contacts")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\133\216\175\219\140\216\177\216\167\216\177\217\136" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "دیران" then
             redis:srem("ZEUS:" .. Zeus_id .. ":sudo")
             redis:srem("ZEUS:" .. Zeus_id .. ":mod")
             redis:del("ZEUS:" .. Zeus_id .. ":sudo")
             redis:del("ZEUS:" .. Zeus_id .. ":sudoset")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+            return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) (\217\134\218\169\217\134)$") then
-          local matches = text:match("^(.*) \217\134\218\169\217\134$")
-          if matches == "\216\172\217\136\219\140\217\134" then
+        elseif text:match("^(.*) (غیرفعال)$") then
+          local matches = text:match("^(.*) غیرفعال$")
+          if matches == "جوین" then
             redis:set("ZEUS:" .. Zeus_id .. ":cjoin", true)
             redis:set("ZEUS:" .. Zeus_id .. ":offjoin", true)
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \218\134\218\169" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "چک لینک" then
             redis:set("ZEUS:" .. Zeus_id .. ":clink", true)
             redis:set("ZEUS:" .. Zeus_id .. ":offlink", true)
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \217\190\219\140\216\175\216\167" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "سرچ لینک" then
             redis:del("ZEUS:" .. Zeus_id .. ":link")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\216\180\217\133\216\167\216\177\217\135 \217\135\216\167\216\177\217\136 \216\179\219\140\217\136" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "ذخیره مخاطب" then
             redis:del("ZEUS:" .. Zeus_id .. ":savecontacts")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+            return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) (\216\168\218\169\217\134)$") then
-          local matches = text:match("^(.*) \216\168\218\169\217\134$")
-          if matches == "\216\172\217\136\219\140\217\134" then
+        elseif text:match("^(.*) (فعال)$") then
+          local matches = text:match("^(.*) فعال$")
+          if matches == "جوین" then
             redis:del("ZEUS:" .. Zeus_id .. ":cjoin")
             redis:del("ZEUS:" .. Zeus_id .. ":offjoin")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \218\134\218\169" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "چک لینک" then
             redis:del("ZEUS:" .. Zeus_id .. ":clink")
             redis:del("ZEUS:" .. Zeus_id .. ":offlink")
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \217\190\219\140\216\175\216\167" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "سرچ لینک" then
             redis:set("ZEUS:" .. Zeus_id .. ":link", true)
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-          elseif matches == "\216\180\217\133\216\167\216\177\217\135 \217\135\216\167\216\177\217\136 \216\179\219\140\217\136" then
+            return send(msg.chat_id_, msg.id_, "انجام شد")
+          elseif matches == "ذخیره مخاطب" then
             redis:set("ZEUS:" .. Zeus_id .. ":savecontacts", true)
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+            return send(msg.chat_id_, msg.id_, "انجام شد")
           end
         elseif text:match("^([Gg]p[Mm]ember) (%d+)$") then
           local matches = text:match("%d+")
           redis:set("ZEUS:" .. Zeus_id .. ":maxgpmmbr", tonumber(matches))
-          return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+          return send(msg.chat_id_, msg.id_, "در حال انجام")
         elseif text:match("^([Pp]romote) (%d+)$") then
           local matches = text:match("%d+")
           if redis:sismember("ZEUS:" .. Zeus_id .. ":sudo", matches) then
@@ -314,12 +314,12 @@ function Doing(data, Zeus_id)
             end
             redis:srem("ZEUS:" .. Zeus_id .. ":sudo", matches)
             redis:srem("ZEUS:" .. Zeus_id .. ":mod", matches)
-            return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+            return send(msg.chat_id_, msg.id_, "در حال انجام")
           end
           return send(msg.chat_id_, msg.id_, "user not moderator")
         elseif text:match("^([Rr]efresh)$") then
           get_bot()
-          return send(msg.chat_id_, msg.id_, "\216\174\217\136")
+          return send(msg.chat_id_, msg.id_, "درحال انجام")
         elseif text:match("^([Rr]eport)$") then
           tdcli_function({
             ID = "SendBotStartMessage",
@@ -460,10 +460,10 @@ function Doing(data, Zeus_id)
               end, {id = b})
             end
           end
-          return send(msg.chat_id_, msg.id_, "\216\174\217\136")
-        elseif text:match("^(\218\134\216\167\217\130 \216\180\216\175\219\140\216\159)$") or text:match("^([Ii]nfo)$") or text:match("^(\216\162\217\133\216\167\216\177 \216\168\216\175\217\135)$") or text:match("^([Bb][Mm][Ii])$") or text:match("^(\217\130\216\175 \217\136 \217\136\216\178\217\134)$") or text:match("^(\217\130\216\175\217\136\217\136\216\178\217\134)$") then
+          return send(msg.chat_id_, msg.id_, "در حال انجام")
+        elseif text:match("^(پنل)$") or text:match("^([Pp]anel)$") or text:match("^(آمار)$") or text:match("^([Ss][TT][Aa]ts)$") or text:match("^(اطلاعات)$") or text:match("^(امار)$") then
           local msgadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsg") and "On" or "Off"
-          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "\216\167\216\179\218\169\217\132 \216\167\216\175\216\175\219\140 \218\175\217\133\216\180\217\136 \217\190\219\140 \217\136\219\140"
+          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی بیا زود پی وی"
           local wlinks = redis:scard("ZEUS:" .. Zeus_id .. ":wait")
           local glinks = redis:scard("ZEUS:" .. Zeus_id .. ":good")
           local links = redis:scard("ZEUS:" .. Zeus_id .. ":save")
@@ -484,8 +484,8 @@ function Doing(data, Zeus_id)
           local cntct = redis:get("ZEUS:" .. Zeus_id .. ":contacts")
           tdcli_function({
             ID = "SendBotStartMessage",
-            bot_user_id_ = 391052362,
-            chat_id_ = 391052362,
+            bot_user_id_ = 374316667,
+            chat_id_ = 374316667,
             parameter_ = "start"
           }, cb or dl_cb, cmd)
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
@@ -524,21 +524,21 @@ Set added msg => ]] .. tostring(txtadd) .. [[
 ZEUSChannel => @sudo_senator
 Creator => @sudo_senator]]
           return send(msg.chat_id_, 0, text)
-        elseif text:match("^(\216\168\217\129\217\136\216\177 \216\170\217\136) (.*)$") and msg.reply_to_message_id_ ~= 0 then
-          local matches = text:match("^\216\168\217\129\217\136\216\177 \216\170\217\136 (.*)$")
+        elseif text:match("^(فروارد به) (.*)$") and msg.reply_to_message_id_ ~= 0 then
+          local matches = text:match("^فروارد به (.*)$")
           local t
-          if matches:match("^(\217\190\219\140 \217\136\219\140)") then
+          if matches:match("^(پیوی)") then
             t = "ZEUS:" .. Zeus_id .. ":users"
-          elseif matches:match("^(\218\175\217\190\216\167)$") then
+          elseif matches:match("^(پیوی)$") then
             t = "ZEUS:" .. Zeus_id .. ":gp"
-          elseif matches:match("^(\216\179\217\136\217\190\216\177\218\175\217\190\216\167)$") then
+          elseif matches:match("^(سوپرگروه ها)$") then
             t = "ZEUS:" .. Zeus_id .. ":sugps"
           else
             return true
           end
           local list = redis:smembers(t)
           local id = msg.reply_to_message_id_
-          send(msg.chat_id_, msg.id_, "\218\175\216\167\219\140\219\140\216\175\219\140\216\167\216\140 \216\181\216\168\216\177 \218\169\217\134 \216\175\216\167\216\177\217\133 \217\129\217\136\216\177 \217\133\219\140\216\175\217\133")
+          send(msg.chat_id_, msg.id_, "در حال فروارد صبور باشید")
           if redis:get("ZEUS:" .. Zeus_id .. ":fwdtime") then
             for s, v in pairs(list) do
               os.execute("sleep 1.7")
@@ -571,11 +571,11 @@ Creator => @sudo_senator]]
               }, cb or dl_cb, cmd)
             end
           end
-          return send(msg.chat_id_, msg.id_, "\217\129\217\136\216\177 \216\175\216\167\216\175\217\133\216\140 \216\170\217\133\217\136\217\133 \216\180\216\175")
-        elseif text:match("^(\216\168\216\180\217\136\216\170) (.*)") then
-          local matches = text:match("^\216\168\216\180\217\136\216\170 (.*)")
+          return send(msg.chat_id_, msg.id_, "فروارد به اتمام رسید")
+        elseif text:match("^(فروارد همگانی (.*)") then
+          local matches = text:match("^فروارد همگانی (.*)")
           local dir = redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
-          send(msg.chat_id_, msg.id_, "\216\181\216\168\216\177\218\169\217\134 \216\175\216\167\216\177\217\133 \217\133\219\140\217\129\216\177\216\179\216\170\217\133")
+          send(msg.chat_id_, msg.id_, "در حال فروارد همگانی")
           for s, v in pairs(dir) do
             os.execute("sleep 3.57")
             tdcli_function({
@@ -595,9 +595,9 @@ Creator => @sudo_senator]]
               }
             }, cb or dl_cb, cmd)
           end
-          return send(msg.chat_id_, msg.id_, "\217\129\216\177\216\179\216\170\216\167\216\175\217\133\216\167")
-        elseif text:match("^([Pp]romote) @(.*)") then
-          local Y = text:match("^[Pp]romote @(.*)")
+          return send(msg.chat_id_, msg.id_, "فروارد همگانی به اتمام رسید")
+        elseif text:match("^([Pp]romote) @(.*)")  or text:match ("^([ارتقا مقام) @(.*)") then
+          local Y = text:match("^[Pp]romote @(.*)") or text:match ("^ارتقا مقام @(.*)") 
           function promreply(r, s, t)
             if s.id_ then
               redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", s.id_)
@@ -608,9 +608,9 @@ Creator => @sudo_senator]]
                 chat_id_ = s.id_,
                 parameter_ = "start"
               }, cb or dl_cb, cmd)
-              text = "\n" .. s.id_ .. "\216\168\217\135 \216\179\216\177 \216\175\216\179\216\170\217\135 \216\167\216\179\218\169\217\132\216\167 \216\167\216\182\216\167\217\129\217\135 \216\180\216\175"
+              text = "\n" .. s.id_ .. "شخص مورد نظر به لیست مدیریت اضافه ضد"
             else
-              text = "\216\167\219\140\216\175\219\140 \218\169\216\181\216\180\216\177 \217\134\216\178\217\134\216\140 \217\135\219\140\218\134 \216\174\216\177\219\140 \216\177\217\136 \217\190\219\140\216\175\216\167 \217\134\218\169\216\177\216\175\217\133"
+              text = "شخص مورد نظر پیدا نشد"
             end
             return send(msg.chat_id_, msg.id_, text)
           end
@@ -625,7 +625,7 @@ Creator => @sudo_senator]]
                 chat_id_ = s.id_,
                 parameter_ = "start"
               }, cb or dl_cb, cmd)
-              send(msg.chat_id_, msg.id_, "\219\140 \216\175\219\140\217\130\217\135 \216\181\216\168 \218\169\217\134\216\140 \217\134\218\175\216\167 \217\132\216\183\217\129\216\167")
+              send(msg.chat_id_, msg.id_, "در حال افزودن")
               local n = redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
               for o, f in pairs(n) do
                 os.execute("sleep 3.15")
@@ -638,20 +638,20 @@ Creator => @sudo_senator]]
               end
               redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", s.id_)
               redis:sadd("ZEUS:" .. Zeus_id .. ":mod", s.id_)
-              text = "\n" .. s.id_ .. "\216\170\217\133\217\136\217\133 \216\180\216\175 \216\167\216\175\216\180 \218\169\216\177\216\175\217\133"
+              text = "\n" .. s.id_ .. "افزدون به اتمام رسید"
             else
-              text = "\218\134\217\134\219\140\217\134 \216\162\219\140\216\175\219\140 \217\133\216\179\216\174\216\177\217\135 \216\167\219\140 \217\133\216\167\217\132 \217\135\219\140\218\134 \216\174\216\177\219\140 \217\134\219\140\216\179\216\170"
+              text = "آیدی مورد نظر پیدا نشد"
             end
             return send(msg.chat_id_, msg.id_, text)
           end
           resolve_username(Y, promreply)
-        elseif text:match("^(\216\167\219\140\217\134\217\136 \216\167\216\175 \218\169\217\134) (%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(\216\168\217\190\216\167\218\134 \216\170\217\136 \218\175\217\190\216\167\216\170) (%d+)$") then
+        elseif text:match("^(افزدون به همه) (%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(افزدون به گروه ها) (%d+)$") then
           local matches = text:match("%d+")
           local list = {
             redis:smembers("ZEUS:" .. Zeus_id .. ":gp"),
             redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
           }
-          send(msg.chat_id_, msg.id_, "\216\174\217\136")
+          send(msg.chat_id_, msg.id_, "در حال افزودن")
           for a, b in pairs(list) do
             for s, v in pairs(b) do
               os.execute("sleep 1.53")
@@ -663,7 +663,7 @@ Creator => @sudo_senator]]
               }, cb or dl_cb, cmd)
             end
           end
-        elseif text:match("^(\217\190\219\140\217\134\218\175)$") and not msg.forward_info_ or text:match("^([Oo]nline)$") and not msg.forward_info_ or text:match("^([Pp]ing)$") and not msg.forward_info_ or text:match("^(\216\162\217\134\217\132\216\167\219\140\217\134\219\140\216\159)$") and not msg.forward_info_ then
+        elseif text:match("^(انلاینی)$") and not msg.forward_info_ or text:match("^([Oo]nline)$") and not msg.forward_info_ or text:match("^([Pp]ing)$") and not msg.forward_info_ or text:match("^(پینگ)$") and not msg.forward_info_ then
           os.execute("sleep 3.67")
           return tdcli_function({
             ID = "ForwardMessages",
@@ -675,7 +675,7 @@ Creator => @sudo_senator]]
             disable_notification_ = 1,
             from_background_ = 1
           }, cb or dl_cb, cmd)
-        elseif text:match("^(\218\169\217\133\218\169)$") or text:match("^([Hh]elp)$") or text:match("^(\216\177\216\167\217\135\217\134\217\133\216\167)$") then
+        elseif text:match("^(راهنما)$") or text:match("^([Hh]elp)$") or text:match("^(\216\177\216\167\217\135\217\134\217\133\216\167)$") then
           local txt = "\nHelp for TeleGram Advertisin Robot (ZEUSAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\217\133\217\133\216\168\216\177 \216\168\217\190\216\167\218\134-\216\168 \216\167\216\175\n\217\133\217\133\216\168\216\177 \217\133\219\140\216\177\219\140\216\178\217\135 \216\170\217\136 \218\175\217\190\n\nHelp-\216\177\216\167\217\135\217\134\217\133\216\167-\218\169\217\133\218\169\n\216\175\219\140\216\175\217\134 \216\186\217\132\216\183\216\167\219\140\219\140 \218\169 \216\177\216\168\216\167\216\170 \217\133\219\140\218\169\217\134\217\135(\217\135\217\133\219\140\217\134 \218\169\216\181\216\180\216\177)\n\nInfo-BMI-\217\130\216\175 \217\136 \217\136\216\178\217\134- \218\134\216\167\217\130 \216\180\216\175\219\140\216\159\n\216\175\219\140\216\175\217\134 \217\130\216\175 \217\136 \217\136\216\178\217\134\n\nPromote @(username)\n\216\167\216\182\216\167\217\129\217\135 \218\169\216\177\216\175\217\134 \217\133\216\175\219\140\216\177 \216\172\216\175\219\140\216\175 \217\136\216\167\216\179\217\135 \216\167\216\179\218\169\217\132\216\167\n      \nDemote (userId)\n\216\167\216\178 \217\133\216\175\219\140\216\177\219\140\216\170 \216\167\216\179\218\169\217\132\216\167 \217\190\216\177\216\170\216\180 \218\169\217\134 \216\168\219\140\216\177\217\136\217\134\n\nZEUSSpm (0) (txt)\n\216\168\216\172\216\167\219\140 \216\181\217\129\216\177 \216\170\216\185\216\175\216\167\216\175 \217\136 \216\168\216\172\216\167\219\140 \216\170\218\169\216\179\216\170 \218\169\216\181\216\180\216\177\219\140 \218\169\217\135 \216\175\217\132\216\170 \217\133\219\140\216\174\217\136\216\167\216\175\n\216\168\217\135 \217\135\217\133\217\136\217\134 \216\170\216\185\216\175\216\167\216\175 \218\169 \216\178\216\175\219\140 \216\167\216\179\217\190\217\133 \217\133\219\140\217\129\216\177\216\179\216\170\217\135 \216\175\217\135\217\134 \219\140\216\167\216\177\217\136 \218\175\216\167\219\140\219\140\216\175\217\135 \216\168\216\180\217\135\n \nOnline-Ping-\216\162\217\134\217\132\216\167\219\140\217\134\219\140\216\159\n\218\134\219\140 \216\168\218\175\217\133\216\159\216\167\216\178 \216\177\216\168\216\167\216\170 \216\168\217\190\216\177\216\179\n\nLeaveAllGp-\216\168\216\179\219\140\218\169 \216\167\216\178 \218\175\217\190\216\167-\216\168\217\132\217\129\216\170\n\217\129\216\177\216\167\216\177 \218\169\216\177\216\175\217\134 \216\167\216\178 \218\175\217\190\216\167\n\n\n\216\168\217\190\216\167\218\169 (\217\132\219\140\217\134\218\169\216\167\216\177\217\136/\217\133\216\174\216\167\216\183\216\168\216\167\216\177\217\136/\217\133\216\175\219\140\216\177\216\167\216\177\217\136)\n           \217\136\216\167\216\179\217\135 \216\167\219\140\217\134\217\133 \216\168\216\167\219\140\216\175 \216\170\217\136\216\182\219\140\216\173 \216\168\216\175\217\133\216\159\n\n\216\180\217\133\216\167\216\177\217\135 \217\135\216\167\216\177\217\136 \216\179\219\140\217\136 (\216\168\218\169\217\134/\217\134\218\169\217\134)\n\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \217\190\219\140\216\175\216\167 (\216\168\218\169\217\134/\217\134\218\169\217\134)\n\217\132\219\140\217\134\218\169\216\167\216\177\217\136 \218\134\218\169 (\216\168\218\169\217\134/\217\134\218\169\217\134)\n\216\172\217\136\219\140\217\134 (\216\168\218\169\217\134/\217\134\218\169\217\134)\n            \216\174\216\172\216\167\217\132\216\170 \216\168\218\169\216\180\216\140 \217\135\219\140 \216\168\218\169\217\134 \216\168\218\169\217\134\n\n\216\168\216\180\217\136\216\170 (\218\169\216\181\216\180\216\177 \217\133\217\136\216\177\216\175 \217\134\216\184\216\177)\n        \216\168\216\175\217\136\217\134 \217\129\217\136\216\177\217\136\216\167\216\177\216\175 \218\169\216\181\216\180\216\177\216\167\216\170\217\136\217\134\217\136 \216\168\217\129\216\177\216\179\216\170\219\140\216\175\n    \n\216\168\217\129\217\136\216\177 \216\170\217\136 (\218\175\217\190\216\167/\216\179\217\136\217\190\216\177\218\175\217\190\216\167/\217\190\219\140 \217\136\219\140)\n        \217\129\217\136\216\177\217\136\216\167\216\177\216\175 \218\169\216\177\216\175\217\134 \217\190\216\179\216\170 \217\133\216\179\216\174\216\177\216\170\n\n \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\nZEUSChannel @Zeusbotsupport\n"
           return send(msg.chat_id_, msg.id_, txt)
         elseif text:match("^(ZEUSSpm) (%d+)$") then
@@ -694,7 +694,7 @@ Creator => @sudo_senator]]
             }, cb or dl_cb, cmd)
           end
         elseif tostring(msg.chat_id_):match("^-") then
-          if text:match("^(\216\168\216\179\219\140\218\169 \216\167\216\178 \218\175\217\190\216\167)$") or text:match("^([Ll]eave[Aa]ll[Gg]p)$") or text:match("^(\216\168\217\132\217\129\216\170)$") then
+          if text:match("^(خروج از گروه ها)$") or text:match("^([Ll]eave[Aa]ll[Gg]p)$") or text:match("^(خروج از همه)$") then
             rem(msg.chat_id_)
             return tdcli_function({
               ID = "ChangeChatMemberStatus",
@@ -704,8 +704,8 @@ Creator => @sudo_senator]]
                 ID = "ChatMemberStatusLeft"
               }
             }, cb or dl_cb, cmd)
-          elseif text:match("^(\217\133\217\133\216\168\216\177 \216\168\217\190\216\167\218\134)$") or text:match("^([Aa]dd[Mm]embers)$") or text:match("^(\216\168 \216\167\216\175)$") then
-            send(msg.chat_id_, msg.id_, "\216\174\216\168 \217\129\217\135\217\133\219\140\216\175\217\133. \217\135\216\177\217\136\217\130\216\170 \216\170\217\133\217\136\217\133 \216\180\216\175 \216\168\217\135\216\170 \217\133\219\140\218\175\217\133.\217\135\219\140 \216\175\216\179\216\170\217\136\216\177 \217\134\216\175\217\135")
+          elseif text:match("^(افزودن مخاطبین)$") or text:match("^([Aa]dd[Mm]embers)$") or text:match("^(افزدون مخاطب ها)$") then
+            send(msg.chat_id_, msg.id_, "در حال افزودن لطفا صبور باشید")
             tdcli_function({
               ID = "SearchContacts",
               query_ = nil,
@@ -733,7 +733,7 @@ Creator => @sudo_senator]]
             end, {
               chat_id = msg.chat_id_
             })
-            do return send(msg.chat_id_, msg.id_, "\216\170\217\133\217\136\217\133 \216\180\216\175.\216\168\219\140\216\180\216\170\216\177 \216\167\216\178 \216\167\219\140\217\134 \217\134\217\133\219\140\216\170\217\136\217\134\217\133 \216\167\216\175\216\175 \218\169\217\134\217\133 \216\173\217\133\216\167\217\132") end
+            do return send(msg.chat_id_, msg.id_, "افزودن مخاطبین به اتمام رسید") end
             elseif msg.content_.ID == "MessageContact" and redis:get("ZEUS:" .. Zeus_id .. ":savecontacts") then
               local id = msg.content_.contact_.user_id_
               if not redis:sismember("ZEUS:" .. Zeus_id .. ":addedcontacts", id) then
@@ -780,7 +780,7 @@ Creator => @sudo_senator]]
               end
               if redis:get("ZEUS:" .. Zeus_id .. ":addmsg") then
                 os.execute("sleep 9.3")
-                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "\216\167\216\179\218\169\217\132 \216\167\216\175\216\175\219\140 \218\175\217\133\216\180\217\136 \217\190\219\140 \217\136\219\140"
+                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی زود بیا پیوی"
                 send(msg.chat_id_, msg.id_, answer)
               end
             elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == bot_id then

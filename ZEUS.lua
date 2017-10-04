@@ -521,7 +521,7 @@ Added msg => ]] .. tostring(msgadd) .. [[
 Set added msg => ]] .. tostring(txtadd) .. [[
 
 
-ZEUSChannel => @sudo_senator
+ZEUSChannel => @ZEUSbotsupport
 Creator => @sudo_senator]]
           return send(msg.chat_id_, 0, text)
         elseif text:match("^(فروارد به) (.*)$") and msg.reply_to_message_id_ ~= 0 then

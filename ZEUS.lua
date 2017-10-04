@@ -230,8 +230,8 @@ function Doing(data, Zeus_id)
       end
       if is_myZEUS(msg) then
         find_link(text)
-        if text:match("^(.*)(پاک کردن)$") then
-          local matches = text:match("^(.*) پاک کردن$")
+        if text:match("^(.*)(حذف شه)$") then
+          local matches = text:match("^(.*) حف شه$")
           if matches == "لینک" then
             redis:del("ZEUS:" .. Zeus_id .. ":good")
             redis:del("ZEUS:" .. Zeus_id .. ":wait")
@@ -248,8 +248,8 @@ function Doing(data, Zeus_id)
             redis:del("ZEUS:" .. Zeus_id .. ":sudoset")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) ( غیرفعال کردن)$") then
-          local matches = text:match("^(.*) غیرفعال کردن$")
+        elseif text:match("^(.*) ( غیرفعال)$") then
+          local matches = text:match("^(.*) غیرفعال$")
           if matches == "جوین" then
             redis:set("ZEUS:" .. Zeus_id .. ":cjoin", true)
             redis:set("ZEUS:" .. Zeus_id .. ":offjoin", true)
@@ -265,8 +265,8 @@ function Doing(data, Zeus_id)
             redis:del("ZEUS:" .. Zeus_id .. ":savecontacts")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) فعال کردن$") then
-          local matches = text:match("^(.*) فعال کردن$")
+        elseif text:match("^(.*) فعال$") then
+          local matches = text:match("^(.*) فعال$")
           if matches == "جوین" then
             redis:del("ZEUS:" .. Zeus_id .. ":cjoin")
             redis:del("ZEUS:" .. Zeus_id .. ":offjoin")
@@ -462,7 +462,7 @@ function Doing(data, Zeus_id)
           return send(msg.chat_id_, msg.id_, "انجام شد")
         elseif text:match("^(پنل)$") or text:match("^([PP]anel)$") or text:match("^(اطلاعات)$") or text:match("^([Bb][Mm][Ii])$") or text:match("^(گروه ها)$") or text:match("^(گروهها)$") then
           local msgadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsg") and "On" or "Off"
-          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "عزیزم اددی بیا پیوی "
+          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "ادی شدی زود بیا پیوی "
           local wlinks = redis:scard("ZEUS:" .. Zeus_id .. ":wait")
           local glinks = redis:scard("ZEUS:" .. Zeus_id .. ":good")
           local links = redis:scard("ZEUS:" .. Zeus_id .. ":save")
@@ -520,11 +520,11 @@ Added msg => ]] .. tostring(msgadd) .. [[
 
 Set added msg => ]] .. tostring(txtadd) .. [[
 
-
+ZEUSChannel @ZEUSbotsupport
 Creator => @sudo_senator]]
           return send(msg.chat_id_, 0, text)
-        elseif text:match("^(فروارد) (.*)$") and msg.reply_to_message_id_ ~= 0 then
-          local matches = text:match("^فروارد (.*)$")
+        elseif text:match("^(فروارد به) (.*)$") and msg.reply_to_message_id_ ~= 0 then
+          local matches = text:match("^فروارد به (.*)$")
           local t
           if matches:match("^(پیوی)") then
             t = "ZEUS:" .. Zeus_id .. ":users"
@@ -537,7 +537,7 @@ Creator => @sudo_senator]]
           end
           local list = redis:smembers(t)
           local id = msg.reply_to_message_id_
-          send(msg.chat_id_, msg.id_, "لطفا صبور باشید در حال فروعرد هستم")
+          send(msg.chat_id_, msg.id_, "لطفا صبور باشید در حال فروارد هستم")
           if redis:get("ZEUS:" .. Zeus_id .. ":fwdtime") then
             for s, v in pairs(list) do
               os.execute("sleep 1.7")
@@ -779,7 +779,7 @@ Creator => @sudo_senator]]
               end
               if redis:get("ZEUS:" .. Zeus_id .. ":addmsg") then
                 os.execute("sleep 9.3")
-                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "ادد شدی دوست عزیز بیا پیوی"
+                local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "د شدی زود بیا پیوی"
                 send(msg.chat_id_, msg.id_, answer)
               end
             elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == bot_id then

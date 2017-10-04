@@ -89,9 +89,9 @@ function process_link(s, t)
   end
 end
 function find_link(text)
-  if text:match("https://telegram.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") then
+  if text:match("https://t.me/joinchat/%S+") or text:match("https://telegram.me/joinchat/%S+") then
     local text = text:gsub("t.me", "telegram.me")
-    for link in text:gmatch("(https://telegram.me/joinchat/%S+)") do
+    for link in text:gmatch("(https://t.me/joinchat/%S+)") do
       if not redis:sismember("ZEUS:" .. Zeus_id .. ":alllinks", link) then
         redis:sadd("ZEUS:" .. Zeus_id .. ":wait", link)
         redis:sadd("ZEUS:" .. Zeus_id .. ":alllinks", link)

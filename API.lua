@@ -771,7 +771,7 @@ ZEUSChannel @ZEUSbotsupport]]
           end
         end
         if redis:get("ZEUS:" .. Zeus_id .. ":addmsg") then
-          local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "oskol addi"
+          local answer = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی زود بیا پیوی"
           send(msg.chat_id_, msg.id_, answer)
         end
       elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == bot_id then

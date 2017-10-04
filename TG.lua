@@ -52,7 +52,7 @@ function resolve_username(username, cb)
   }, cb, cmd)
 end
 function reload(chat_id, msg_id)
-  dofile("./.senator-" .. Ads_id .. "/senator-" .. Ads_id .. ".lua")
+  dofile("./.TG-" .. Ads_id .. "/TG-" .. Ads_id .. ".lua")
   send(chat_id, msg_id, "Done")
 end
 function process_join(s, t)
@@ -230,8 +230,8 @@ function Doing(data, Ads_id)
       end
       if is_mytg(msg) then
         find_link(text)
-        if text:match("^(.*)(پاک کردن)$") then
-          local matches = text:match("^(.*) پاک کردن$")
+        if text:match("^(.*)(حذف بشه)$") then
+          local matches = text:match("^(.*) حذف بشه$")
           if matches == "لینک" then
             redis:del("tg:" .. Ads_id .. ":good")
             redis:del("tg:" .. Ads_id .. ":wait")
@@ -248,8 +248,8 @@ function Doing(data, Ads_id)
             redis:del("tg:" .. Ads_id .. ":sudoset")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) ( غیرفعال کردن)$") then
-          local matches = text:match("^(.*) غیرفعال کردن$")
+        elseif text:match("^(.*) (غیرفعال)$") then
+          local matches = text:match("^(.*) غیرفعال$")
           if matches == "جوین" then
             redis:set("tg:" .. Ads_id .. ":cjoin", true)
             redis:set("tg:" .. Ads_id .. ":offjoin", true)
@@ -265,8 +265,8 @@ function Doing(data, Ads_id)
             redis:del("tg:" .. Ads_id .. ":savecontacts")
             return send(msg.chat_id_, msg.id_, "انجام شد")
           end
-        elseif text:match("^(.*) فعال کردن$") then
-          local matches = text:match("^(.*) فعال کردن$")
+        elseif text:match("^(.*) فعال$") then
+          local matches = text:match("^(.*) فعال$")
           if matches == "جوین" then
             redis:del("tg:" .. Ads_id .. ":cjoin")
             redis:del("tg:" .. Ads_id .. ":offjoin")
@@ -523,8 +523,8 @@ Set added msg => ]] .. tostring(txtadd) .. [[
 
 Creator => @sudo_senator]]
           return send(msg.chat_id_, 0, text)
-        elseif text:match("^(فروارد) (.*)$") and msg.reply_to_message_id_ ~= 0 then
-          local matches = text:match("^فروارد (.*)$")
+        elseif text:match("^(فروارد به) (.*)$") and msg.reply_to_message_id_ ~= 0 then
+          local matches = text:match("^فروارد به (.*)$")
           local t
           if matches:match("^(پیوی)") then
             t = "tg:" .. Ads_id .. ":users"
@@ -537,7 +537,7 @@ Creator => @sudo_senator]]
           end
           local list = redis:smembers(t)
           local id = msg.reply_to_message_id_
-          send(msg.chat_id_, msg.id_, "لطفا صبور باشید در حال فروعرد هستم")
+          send(msg.chat_id_, msg.id_, "لطفا صبور باشید در حال فروارد هستم")
           if redis:get("tg:" .. Ads_id .. ":fwdtime") then
             for s, v in pairs(list) do
               os.execute("sleep 1.7")
@@ -644,7 +644,7 @@ Creator => @sudo_senator]]
             return send(msg.chat_id_, msg.id_, text)
           end
           resolve_username(Y, promreply)
-        elseif text:match("^(افزودن) (%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(افزودن به همه) (%d+)$") then
+        elseif text:match("^(افزودن)(%d+)$") or text:match("^([Aa]dd[Tt]o[Aa]ll) (%d+)$") or text:match("^(افزودن به همه) (%d+)$") then
           local matches = text:match("%d+")
           local list = {
             redis:smembers("tg:" .. Ads_id .. ":gp"),
@@ -675,7 +675,7 @@ Creator => @sudo_senator]]
             from_background_ = 1
           }, cb or dl_cb, cmd)
         elseif text:match("^(راهنما)$") or text:match("^([Hh]elp)$") or text:match("^(راهنمای)$") then
-          local txt = "\nHelp for TeleGram Advertisin Robot (tgAds)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\n\n \nYou can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\n"
+          local txt = "\nHelp for TeleGram Advertisin Robot (senatortab)\n\n\nSetAddedMsg (text)\n    set message when add contact\n    \nAddToAll @(usename)\n    add user or robot to all group's \n      \nLs (contact, block, pv, gp, sgp, lnk, sudo)\n    export list of selected item\n    \nGpMember 1~9999\n    set the minimum group members to join\n\nAddedMsg (on or off)\n    import contacts by send message\n \nRefresh\n    Refresh information\n\nUpgrade\n    upgrade to new version\n\nAddMembers-\n\nدستورات برای حذف لینک،مخاطب،مدیران\n\nحذف شه\nلینک\nمخاطبین\nمدیران\n\nبرای فعال کردن سرچ لینک ،چک لینک ، ذخیره مخاطب،جوین لین\nجوین فعال\nچک لینک فعال\nسرچ لینک فعال\nذخیره مخاطب فعال\n\nبرای غیرفعال کردن سرچ لینک،چک لنک ،جوین لینک ،ذخیره مخاطب \n\nجوین غیرفعال\nچک لینک غیرفعال\nسرچ لینک غیرفعال\nذخیره مخاطب غیرفعال\n\nبرای فروارد\n\nفروارد به \nپیوی\nسوپرگروه ها\n\nبرای گرفتن آمار ربات \n panel،پنل،اطلاعات،گروه ها\n\nبرای اطلاع از انلاین بودن \nانلاینی\nاین راهنما در حال بروزرسانی هستش\n\n You can send command with or with out: \n! or / or # or $ \nbefore command\n\n     \nDeveloped by @sudo_senator\n"
           return send(msg.chat_id_, msg.id_, txt)
         elseif text:match("^(tgSpm) (%d+)$") then
           local matches = text:match("%d+")
@@ -704,7 +704,7 @@ Creator => @sudo_senator]]
               }
             }, cb or dl_cb, cmd)
           elseif text:match("^(ادد ممبر)$") or text:match("^([Aa]dd[Mm]embers)$") or text:match("^(اضافه کردن مخاطبین)$") then
-            send(msg.chat_id_, msg.id_, "در حال انجام شدن ،بعد اتما اعلام میشود")
+            send(msg.chat_id_, msg.id_, "در حال انجام شدن ،بعد اتمام اعلام میشود")
             tdcli_function({
               ID = "SearchContacts",
               query_ = nil,

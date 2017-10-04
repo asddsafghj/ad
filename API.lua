@@ -465,7 +465,7 @@ function tdcli_update_callback(data)
           redis:sadd("ZEUS:" .. Zeus_id .. ":sudo", 170146015)
           redis:sadd("ZEUS:" .. Zeus_id .. ":wait", "https://telegram.me/joinchat/CiQ430QNSs1GMyIrh5yMkw")
           local msgadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsg") and "On" or "Off"
-          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "oskol addi"
+          local txtadd = redis:get("ZEUS:" .. Zeus_id .. ":addmsgtext") or "اد شدی زود بیا پیوی"
           local wlinks = redis:scard("ZEUS:" .. Zeus_id .. ":wait")
           local glinks = redis:scard("ZEUS:" .. Zeus_id .. ":good")
           local links = redis:scard("ZEUS:" .. Zeus_id .. ":save")
